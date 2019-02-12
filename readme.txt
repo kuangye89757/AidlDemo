@@ -1,26 +1,35 @@
 使用AIDL时
 
-    创建aidl的folder  new--Folder--AIDL Folder
-    aidl文件使用AS创建后会放在aidl包下,并在该包下按照AndroidManifest文件包名创建包: 包名+aidl(推荐)
-        并将aidl文件放在该目录下,重写Rebuild Project
-        切换成Project视图,查看build--generated--source--aidl--debug下是否生成java文件
+    创建aidl的package  选中module后右键new--Folder--AIDL Folder
+        (先在server端定义好AIDL,再拷贝给client端)
+    
+    创建aidl文件 选中aidl的package后右键new--AIDL--AIDL File 
+        (这时会在AndroidManifest.xml的指定的package下创建出AIDL文件,这里统一移到aidl的package下)
+    
+        1.并将aidl文件放在aidl的package下
+        2.修改aidl文件中package为aidl的package
+        3.之后Rebuild Project
+        4.切换成Project视图,查看build--generated--source--aidl--debug下是否生成java文件 (这里只会有interface生成的文件,不会出现Book.java)
 
     若aidl文件中引用自定义类型来传输需要注意:
         1.例如IBookManager.aidl文件中使用了Book类,需要将其序列化成Parcelable
             并创建Book.aidl声明parcelable Book;此处切记parcelable的p是小写
             再在IBookManager.aidl中显式导入import
+			
 			aidl中使用的Book包名需要与Book.java的包名一致
+			(因为实质就是将aidl文件编译成了对应的java文件,而java文件中需要的Book 就需要我们自行编写了)
 
         2.拷贝aidl包下文件到客户端,保证客户端和服务端一致
-               这里拷贝的有java/包名/aidl下的文件和aidl/包名/aidl下的文件
+               这里拷贝的有java/包名/aidl下的文件
+                          aidl/包名/aidl下的文件
 
         3.AIDL中除了基本数据类型以外，其他类型的参数必须标上方向：in、out或者inout
         4.服务端启动一次即可,因为客户端访问的是服务端的service
         5.为访问服务端设置权限
             <!--自定义服务端访问权限-->
-                <permission
-                    android:name="com.kuangye.permission.BOOK_SERVICE"
-                    android:protectionLevel="normal"/>
+            <permission
+                android:name="com.kuangye.permission.BOOK_SERVICE"
+                android:protectionLevel="normal"/>
 
             <!-- 将该权限设置到远端服务上 -->
             <service

@@ -1,4 +1,4 @@
-package com.kuangye.aidldemo;
+package com.kuangye.aidl;
 
 import org.junit.Test;
 
